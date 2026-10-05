@@ -1,4 +1,5 @@
 // URL of the Convex deployment that stores the ratings.
-// Local dev: http://127.0.0.1:3210 (from `npx convex dev`).
-// Production: the CONVEX_URL printed by `npx convex deploy` (https://<name>.convex.cloud).
-export const CONVEX_URL = "http://127.0.0.1:3210";
+// Production: https://agreeable-antelope-656.eu-west-1.convex.cloud
+// Local dev: http://127.0.0.1:3210 (from `npx convex dev`). Also add it to
+// host_permissions in manifest.json while developing.
+export const CONVEX_URL = "https://agreeable-antelope-656.eu-west-1.convex.cloud";

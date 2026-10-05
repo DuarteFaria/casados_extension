@@ -65,21 +65,25 @@ The average is updated in the same transaction as the vote, so reads never scan 
 
 ## Local development
 
-Requires Node ≥ 18.
+Requires Node ≥ 20 (`nvm use` picks it up from `.nvmrc`).
 
 ```sh
 npm install
-CONVEX_AGENT_MODE=anonymous npx convex dev   # local backend at http://127.0.0.1:3210, no account needed
+npx convex dev   # local backend at http://127.0.0.1:3210
 ```
+
+The extension talks to production by default. To use the local backend, set `CONVEX_URL` in `extension/config.js` to `http://127.0.0.1:3210` and add `http://127.0.0.1:3210/*` to `host_permissions` in `extension/manifest.json` (don't commit those two changes).
 
 Then in Chrome go to `chrome://extensions` → enable **Developer mode** → **Load unpacked** → choose the `extension/` folder, and open any series on Opto.
 
 After changing the extension, press reload on its card in `chrome://extensions` **and refresh the Opto tab**. Until the tab is refreshed, the old script can't reach the extension and votes fail with "A extensão foi atualizada".
 
+## Deploying
+
+- **Backend:** `npx convex deploy` pushes `convex/` to production (`https://agreeable-antelope-656.eu-west-1.convex.cloud`).
+- **Extension:** `npm run zip` builds `dist/opto-rank-<version>.zip`. Bump `version` in `extension/manifest.json` for each release.
+
 ## Sharing with testers
 
-1. **Deploy the backend:** `npx convex login`, then `npx convex deploy`. Copy the production URL (`https://<name>.convex.cloud`).
-2. **Point the extension at it:** put that URL in `extension/config.js` and remove `http://127.0.0.1:3210/*` from `host_permissions` in `extension/manifest.json`.
-3. **Send it:**
-   - **Quickest (friends):** zip the `extension/` folder. Testers unzip it, then in `chrome://extensions` turn on Developer mode → **Load unpacked**. No auto-updates: send a new zip for each change.
-   - **Proper:** publish it **Unlisted** on the [Chrome Web Store](https://chrome.google.com/webstore/devconsole). Only people with the link can install it, and it updates automatically. You need a $5 one-time developer account, icons (16/48/128 px), at least one 1280×800 screenshot, and a short privacy policy (the extension stores an anonymous random ID and your votes, nothing else). Review usually takes a few days.
+- **Quickest (friends):** send the zip. Testers unzip it, then in `chrome://extensions` turn on Developer mode → **Load unpacked** → pick the unzipped folder. No auto-updates: send a new zip for each change.
+- **Proper:** publish it **Unlisted** on the [Chrome Web Store](https://chrome.google.com/webstore/devconsole). Only people with the link can install it, and it updates automatically. You need a $5 one-time developer account, icons (16/48/128 px), at least one 1280×800 screenshot, and a short privacy policy (the extension stores an anonymous random ID and your votes, nothing else). Review usually takes a few days.

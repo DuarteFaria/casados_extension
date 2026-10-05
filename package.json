@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "convex dev",
     "deploy": "convex deploy",
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p .",
+    "zip": "node scripts/zip.mjs"
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +17,8 @@
   "devDependencies": {
     "typescript": "^5.9.3"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  }
 }
