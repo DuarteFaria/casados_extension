@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Opto Rank",
+  "version": "0.1.0",
+  "description": "Dá nota (1 Intancável → 5 Cinema) e conta os Momentos o7 dos episódios e filmes da Opto SIC.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://opto.sic.pt/*",
+    "https://*.convex.cloud/*",
+    "http://127.0.0.1:3210/*"
+  ],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "content_scripts": [
+    {
+      "matches": ["https://opto.sic.pt/*"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

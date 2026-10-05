@@ -1,0 +1,240 @@
+/* Opto Rank — matches Opto's dark UI (surface #19191e, Space Grotesk). */
+:root {
+  --or-accent: #9b6bff;
+  --or-surface: #232329;
+  --or-surface-2: #2c2c34;
+  --or-ink: #f4f4f6;
+  --or-ink-2: #b9b9c3;
+  --or-ink-3: #85858f;
+  --or-line: rgba(255, 255, 255, 0.08);
+}
+
+.or-card,
+.or-panel,
+.or-movie,
+.or-end,
+.or-toast {
+  font-family: inherit;
+  color: var(--or-ink);
+  box-sizing: border-box;
+}
+
+/* ---------- badge ---------- */
+.or-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.or-badge-star { color: var(--or-accent); }
+.or-badge-count,
+.or-badge--empty,
+.or-muted { color: var(--or-ink-3); font-size: 12px; }
+
+/* ---------- picker ---------- */
+.or-picker { display: flex; gap: 4px; flex-wrap: wrap; }
+.or-picker.is-busy { opacity: 0.5; pointer-events: none; }
+.or-chip {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: var(--or-surface-2);
+  color: var(--or-ink-2);
+  font: inherit;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.12s, color 0.12s;
+}
+.or-chip:hover { background: #3a3a44; color: var(--or-ink); }
+.or-chip:focus { outline: none; }
+.or-chip:focus-visible { box-shadow: inset 0 0 0 2px var(--or-ink); }
+.or-chip.is-mine { background: var(--or-accent); color: #fff; font-weight: 700; }
+
+/* Big picker: one segmented strip, text only. */
+.or-picker--big {
+  display: flex;
+  gap: 2px;
+  max-width: 480px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--or-surface-2);
+}
+.or-picker--big .or-chip {
+  flex: 1;
+  height: 34px;
+  padding: 0 6px;
+  border-radius: 7px;
+  background: transparent;
+  font-size: 13px;
+}
+.or-picker--big .or-chip:hover { background: rgba(255, 255, 255, 0.06); }
+.or-picker--big .or-chip.is-mine { background: var(--or-accent); color: #fff; font-weight: 600; }
+.or-chip-label { white-space: nowrap; }
+
+/* ---------- episode card ---------- */
+.or-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 8px;
+  cursor: default;
+}
+
+.or-card-inputs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+
+/* ---------- Momentos o7 ---------- */
+.or-o7 {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--or-ink-2);
+  cursor: default;
+}
+.or-o7-input {
+  box-sizing: border-box;
+  width: 52px;
+  height: 26px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--or-surface-2);
+  color: var(--or-ink);
+  font: inherit;
+  font-size: 12px;
+}
+.or-o7-input:focus { outline: none; border-color: var(--or-accent); }
+.or-o7-input:disabled { opacity: 0.5; }
+.or-movie .or-o7-input { height: 32px; width: 60px; font-size: 13px; border-radius: 8px; }
+
+/* ---------- season panel ----------
+   No card: it sits on the page like Opto's own rows ("Em Direto", "Novidades"). */
+.or-panel { margin: 28px 0 44px; }
+.or-panel-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.or-panel-head h3 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+
+/* chart */
+.or-chart { position: relative; margin-bottom: 28px; }
+.or-chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.or-baseline { stroke: rgba(255, 255, 255, 0.14); stroke-width: 1; }
+.or-axis { fill: var(--or-ink-3); font-size: 10px; font-family: inherit; }
+.or-bar-value { fill: var(--or-ink-2); font-size: 10px; font-weight: 600; font-family: inherit; font-variant-numeric: tabular-nums; }
+.or-bar-fill { fill: var(--or-accent); transition: fill 0.12s; }
+.or-bar-empty { fill: #33333b; }
+.or-bar.is-hover .or-bar-fill { fill: #b996ff; }
+.or-bar.is-hover .or-axis,
+.or-bar.is-hover .or-bar-value { fill: var(--or-ink); }
+.or-hit { fill: transparent; cursor: pointer; }
+.or-tip {
+  position: absolute;
+  top: -6px;
+  transform: translate(-50%, -100%);
+  background: #0f0f13;
+  border: 1px solid var(--or-line);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--or-ink-2);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+.or-tip strong { color: var(--or-ink); }
+
+/* Cinemas / Fillers */
+.or-panel-ranks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 48px; }
+@media (max-width: 800px) { .or-panel-ranks { grid-template-columns: 1fr; } }
+.or-rank h4 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--or-ink-3);
+}
+.or-rank ol { margin: 0; padding: 0; list-style: none; }
+.or-rank a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+  color: inherit;
+  text-decoration: none;
+}
+.or-rank-score {
+  flex: none;
+  width: 2.1em;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.or-rank--top .or-rank-score { color: var(--or-accent); }
+.or-rank--flop .or-rank-score { color: var(--or-ink-3); }
+.or-rank-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.or-rank-title { font-size: 14px; color: var(--or-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.or-rank-meta { font-size: 12px; color: var(--or-ink-3); }
+.or-rank a:hover .or-rank-title { color: var(--or-accent); }
+
+/* ---------- movie ---------- */
+.or-movie { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.or-movie .or-badge { font-size: 15px; }
+
+/* ---------- end-of-episode prompt ---------- */
+.or-end {
+  position: fixed;
+  right: 24px;
+  bottom: 96px;
+  z-index: 2147483646;
+  width: min(440px, calc(100vw - 48px));
+  padding: 16px;
+  background: #19191e;
+  border: 1px solid var(--or-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: or-in 0.25s ease-out;
+}
+@keyframes or-in { from { opacity: 0; transform: translateY(12px); } }
+.or-end-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.or-end-title { margin: 0; font-size: 16px; font-weight: 700; }
+.or-end-close {
+  all: unset;
+  cursor: pointer;
+  color: var(--or-ink-3);
+  font-size: 14px;
+  line-height: 1;
+  padding: 4px;
+}
+.or-end-close:hover { color: var(--or-ink); }
+.or-end-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* ---------- toast ---------- */
+.or-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  background: #0f0f13;
+  border: 1px solid var(--or-line);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+}
