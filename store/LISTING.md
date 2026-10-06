@@ -46,6 +46,7 @@ Extensão não oficial, sem qualquer ligação à SIC ou à Opto.
 | Store icon (128×128) | `../extension/icons/icon-128.png` |
 | Screenshots (1280×800) | `screenshot-1-ranking.png`, `screenshot-2-cards.png`, `screenshot-3-end.png`, `screenshot-4-movie.png` |
 | Small promo tile (440×280) | `promo-small-440x280.png` |
+| Marquee promo tile (1400×560) | `promo-marquee-1400x560.png` |
 
 ## Privacy practices tab
 
