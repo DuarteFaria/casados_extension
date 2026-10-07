@@ -50,7 +50,7 @@ Movie pages get the average and the rating strip under the action buttons.
 ## How it works
 
 ```
-extension/        Chrome MV3, plain JS, no build step
+extension/        MV3 for Chrome and Firefox, plain JS, no build step
   content.js      reads Opto's public API (/api/v1/content/item/...) to map cards → episode IDs, injects the UI
   content.css     styles, matched to Opto's dark UI
   background.js   creates the anonymous per-install deviceId, calls Convex over HTTP
@@ -78,6 +78,10 @@ Then in Chrome go to `chrome://extensions` → enable **Developer mode** → **L
 
 After changing the extension, press reload on its card in `chrome://extensions` **and refresh the Opto tab**. Until the tab is refreshed, the old script can't reach the extension and votes fail with "A extensão foi atualizada".
 
+In Firefox (140+) go to `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on** → choose `extension/manifest.json`. It's removed when Firefox restarts. Or run `npx web-ext run -s extension`, which opens a fresh Firefox profile with the extension loaded and reloads it on every change. `npx web-ext lint -s extension` runs the same checks as addons.mozilla.org.
+
+The same `extension/` folder works in both browsers. `manifest.json` lists the background script twice on purpose: Chrome uses `service_worker`, Firefox uses `scripts`, and each ignores the other.
+
 ## Deploying
 
 - **Backend:** `npx convex deploy` pushes `convex/` to production (`https://agreeable-antelope-656.eu-west-1.convex.cloud`).
@@ -87,3 +91,12 @@ After changing the extension, press reload on its card in `chrome://extensions` 
 
 - **Quickest (friends):** send the zip. Testers unzip it, then in `chrome://extensions` turn on Developer mode → **Load unpacked** → pick the unzipped folder. No auto-updates: send a new zip for each change.
 - **Proper:** publish it **Unlisted** on the Chrome Web Store. Only people with the link can install it, and it updates automatically. Everything for the listing is in [`store/`](store/): screenshots, promo tile and [`store/LISTING.md`](store/LISTING.md) with the description, permission justifications and privacy answers to paste. The privacy policy is [`PRIVACY.md`](PRIVACY.md). You need a $5 one-time developer account, and review usually takes a few days.
+
+### Firefox
+
+Firefox only installs signed add-ons, so testers can't load the zip themselves (except temporarily via `about:debugging`).
+
+- **Unlisted:** upload the zip at [addons.mozilla.org/developers](https://addons.mozilla.org/developers/) and choose **On your own**. Signing is usually automatic and takes minutes. Send testers the signed `.xpi`: opening it in Firefox installs it. No auto-updates: upload and send a new `.xpi` for each version.
+- **Listed:** choose **On this site** to publish it on addons.mozilla.org, with auto-updates. It's free, and you can reuse the texts in [`store/LISTING.md`](store/LISTING.md) and [`PRIVACY.md`](PRIVACY.md).
+
+The add-on ID (`browser_specific_settings.gecko.id` in `manifest.json`) is permanent once uploaded. The manifest also declares the data the extension sends (`websiteActivity`: the episodes you view and your votes), which addons.mozilla.org requires.
