@@ -13,6 +13,20 @@
   const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
   const ROUTE = new RegExp(`^/(series|movie|vod)/[^/]+/(${UUID})`, "i");
   const END_PROMPT_SECONDS = 120;
+  const byNumber = (a, b) => a.episode_number - b.episode_number;
+  const orStat = (s, key) => (s?.[key] ?? -1);
+  const SORTS = [
+    { key: "recent", label: "Mais recentes", cmp: (a, b) => byNumber(b, a) },
+    {
+      key: "rating",
+      label: "Nota",
+      cmp: (a, b, sa, sb) =>
+        (sb?.count ? sb.avg : -1) - (sa?.count ? sa.avg : -1) || orStat(sb, "count") - orStat(sa, "count") || byNumber(a, b),
+    },
+    { key: "o7", label: "Momentos o7", cmp: (a, b, sa, sb) => orStat(sb, "moments") - orStat(sa, "moments") || byNumber(a, b) },
+    { key: "oldest", label: "Mais antigos", cmp: byNumber },
+  ];
+  let sortKey = SORTS.some((x) => x.key === localStorage.getItem("or-sort")) ? localStorage.getItem("or-sort") : "recent";
 
   // ---------- data ----------
 
@@ -229,10 +243,15 @@
 
   function decorateCards(episodes) {
     const byLabel = new Map(episodes.map((e) => [`${e.episode_number}. ${e.title}`.trim(), e]));
+    const { cmp } = SORTS.find((x) => x.key === sortKey);
+    const sorted = [...episodes].sort((a, b) => cmp(a, b, stats.get(a.id), stats.get(b.id)));
+    const position = new Map(sorted.map((e, i) => [e.id, i]));
     for (const card of document.querySelectorAll(".mg-card-descriptive")) {
       const titleEl = card.querySelector(".mg-card-descriptive-description > div");
       const ep = byLabel.get(titleEl?.textContent.trim());
       if (!ep) continue;
+      const cell = card.closest(".playlist-grid > *");
+      if (cell) cell.style.order = position.get(ep.id);
       const desc = titleEl.parentElement;
       const stamp = `${ep.id}:${JSON.stringify(stats.get(ep.id))}`;
       const existing = desc.querySelector(":scope > .or-card");
@@ -307,16 +326,45 @@
       ),
       seasonChart(episodes),
       el("div", { class: "or-panel-ranks" }, rankList("Cinemas", top, "top"), rankList("Fillers", flop, "flop")),
+      sortBar(),
     );
     panel.dataset.stamp = stamp;
     // Line the panel up with the cards (the grid has its own inner gutter).
-    const firstCard = grid.querySelector(".mg-card-descriptive");
-    if (firstCard) {
-      const inset = firstCard.getBoundingClientRect().left - grid.getBoundingClientRect().left;
-      panel.style.marginInline = `${Math.max(0, inset)}px`;
+    const cards = [...grid.querySelectorAll(".mg-card-descriptive")];
+    if (cards.length) {
+      const left = Math.min(...cards.map((c) => c.getBoundingClientRect().left));
+      panel.style.marginInline = `${Math.max(0, left - grid.getBoundingClientRect().left)}px`;
     }
     existing?.remove();
     grid.before(panel);
+  }
+
+  function sortBar() {
+    const bar = el("div", { class: "or-sort", role: "group", "aria-label": "Ordenar episódios" }, el("span", {}, "Ordenar"));
+    for (const { key, label } of SORTS) {
+      bar.append(
+        el(
+          "button",
+          {
+            type: "button",
+            class: `or-chip${key === sortKey ? " is-mine" : ""}`,
+            "aria-pressed": String(key === sortKey),
+            onclick: () => {
+              sortKey = key;
+              localStorage.setItem("or-sort", key);
+              for (const chip of bar.querySelectorAll(".or-chip")) {
+                const on = chip.textContent === label;
+                chip.classList.toggle("is-mine", on);
+                chip.setAttribute("aria-pressed", String(on));
+              }
+              schedule();
+            },
+          },
+          label,
+        ),
+      );
+    }
+    return bar;
   }
 
   /** Average per episode as a wide strip of bars, direct value labels instead of an axis. */
