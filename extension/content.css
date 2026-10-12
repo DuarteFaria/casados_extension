@@ -159,6 +159,16 @@
 .or-sort { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 28px; }
 .or-sort > span { margin-right: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--or-ink-3); }
 .or-sort .or-chip { padding: 0 12px; height: 30px; }
+.or-load-all {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
 .or-rank h4 {
   margin: 0 0 10px;
   font-size: 12px;
