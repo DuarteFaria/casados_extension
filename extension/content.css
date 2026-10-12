@@ -154,6 +154,11 @@
 /* Cinemas / Fillers */
 .or-panel-ranks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 48px; }
 @media (max-width: 800px) { .or-panel-ranks { grid-template-columns: 1fr; } }
+
+/* episode sort */
+.or-sort { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 28px; }
+.or-sort > span { margin-right: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--or-ink-3); }
+.or-sort .or-chip { padding: 0 12px; height: 30px; }
 .or-rank h4 {
   margin: 0 0 10px;
   font-size: 12px;
