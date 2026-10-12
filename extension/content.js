@@ -239,6 +239,17 @@
     if (currentKey() !== `series:${seriesId}`) return; // navigated away meanwhile
     decorateCards(episodes);
     renderSeasonPanel(series, season, episodes);
+    loadAllCards();
+  }
+
+  // Opto renders 30 episodes and loads the rest when its infinite-scroll trigger
+  // nears the viewport. Pinning the trigger on screen loads them all, so sorting
+  // covers the whole season.
+  function loadAllCards() {
+    const loader = document.querySelector(".playlist-grid + .infinite-loading-container");
+    if (!loader || loader.classList.contains("or-load-all")) return;
+    loader.classList.add("or-load-all");
+    window.dispatchEvent(new Event("scroll"));
   }
 
   function decorateCards(episodes) {
